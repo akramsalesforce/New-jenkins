@@ -1,14 +1,22 @@
+Jenkinsfile (Declarative Pipeline)
 pipeline {
-    agent none
-    stages {
-        stage('Example') {
-            agent any
-            options {
-                // Timeout counter starts BEFORE agent is allocated
-                timeout(time: 1, unit: 'SECONDS')
-            }
+ agent any
+
+ stages {
+        stage('Build') {
             steps {
-                echo 'Hello World'
+                sh 'make'
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'make check'
+                junit 'reports/**/*.xml'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make publish'
             }
         }
     }
